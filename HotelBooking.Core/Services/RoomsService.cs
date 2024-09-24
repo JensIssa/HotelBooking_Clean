@@ -14,6 +14,12 @@ namespace HotelBooking.Core
         
         public Room GetRoom(int id)
         {
+            var room = roomRepository.Get(id);
+            if (room == null)
+            {
+                throw new InvalidOperationException($"Room with ID {id} does not exist");
+            }
+
             return roomRepository.Get(id);
         }
 
@@ -24,6 +30,12 @@ namespace HotelBooking.Core
 
         public void AddRoom(Room room)
         {
+            var existingRoom = roomRepository.Get(room.Id);
+            if (existingRoom != null)
+            {
+                throw new InvalidOperationException($"Room With the Id {room.Id} allready added");
+            }
+            
             roomRepository.Add(room);
         }
 

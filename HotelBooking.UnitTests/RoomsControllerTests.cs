@@ -112,5 +112,53 @@ namespace HotelBooking.UnitTests
             mockRoomRepo.Verify(x => x.Remove(It.IsAny<int>()), Times.Never());
         }
 
+        /// <summary>
+        /// Tests a scenario where a room is added succesfully using the service
+        /// </summary>
+        [Fact]
+        public void AddRoom_Succesfully()
+        {
+            // Arrange
+            var newRoom = new Room { Id = 1, Description = "C" };
+            mockRoomRepo.Setup(x => x.Add(newRoom)).Verifiable();
+            // Act
+            roomsService.AddRoom(newRoom);
+            
+            // Assert
+            mockRoomRepo.Verify(x => x.Add(newRoom), Times.Once);
+        }
+
+        /// <summary>
+        /// Tests a scenario where a room which does not exist is retrieved and checks if the correct error is thrown
+        /// The repo is mocked so it returns null (A room that does not exist)
+        /// </summary>
+        [Fact]
+        public void GetById_RoomDoesNotExist()
+        {
+            // Arrange
+            mockRoomRepo.Setup(x => x.Get(3)).Returns((Room)null); 
+
+            // Act & Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => roomsService.GetRoom(3));
+    
+            Assert.IsType<InvalidOperationException>(exception);
+        }
+
+        /// <summary>
+        /// Tests a scenario where a rooms with duplicated id is added by mocking an existing room
+        /// </summary>
+        [Fact]
+        public void AddRoom_WithDuplicateId()
+        {
+            // Arrange
+            var existingRoom = new Room { Id = 1, Description = "A" };
+            mockRoomRepo.Setup(x => x.Get(existingRoom.Id)).Returns(existingRoom); 
+            var newRoom = new Room { Id = 1, Description = "B" }; 
+
+            // Act & Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => roomsService.AddRoom(newRoom));
+            Assert.IsType<InvalidOperationException>(exception);
+        }
+        
     }
 }
