@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace HotelBooking.Core
 {
@@ -28,6 +29,17 @@ namespace HotelBooking.Core
 
         public void RemoveRoom(int id)
         {
+            if (id <= 0)
+            {
+                throw new InvalidOperationException($"Room with ID {id} does not exist");
+            }
+            
+            var room = roomRepository.Get(id);
+            if (room == null)
+            {
+                throw new InvalidOperationException($"Room with ID {id} does not exist.");
+            }
+            
             roomRepository.Remove(id);
         }
 

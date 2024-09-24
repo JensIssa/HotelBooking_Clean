@@ -10,8 +10,8 @@ namespace HotelBooking.UnitTests
 {
     public class RoomsControllerTests
     {
-        private RoomsController controller;
-        private Mock<IRepository<Room>> fakeRoomRepository;
+        private RoomsService roomsService;
+        private Mock<IRepository<Room>> mockRoomRepo;
 
         public RoomsControllerTests()
         {
@@ -22,10 +22,10 @@ namespace HotelBooking.UnitTests
             };
 
             // Create fake RoomRepository. 
-            fakeRoomRepository = new Mock<IRepository<Room>>();
+            mockRoomRepo = new Mock<IRepository<Room>>();
 
             // Implement fake GetAll() method.
-            fakeRoomRepository.Setup(x => x.GetAll()).Returns(rooms);
+            mockRoomRepo.Setup(x => x.GetAll()).Returns(rooms);
 
 
             // Implement fake Get() method.
@@ -44,19 +44,18 @@ namespace HotelBooking.UnitTests
             //fakeRoomRepository.Setup(x => x.Get(It.Is<int>(id => id > 0 && id < 3))).Returns(rooms[1]);
 
             // Integers from 1 to 2 (using a range)
-            fakeRoomRepository.Setup(x =>
-            x.Get(It.IsInRange<int>(1, 2, Moq.Range.Inclusive))).Returns(rooms[1]);
-
+            mockRoomRepo.Setup(x => x.GetAll()).Returns(rooms);
+            mockRoomRepo.Setup(x => x.Get(It.IsInRange<int>(1, 2, Moq.Range.Inclusive))).Returns(rooms[1]);
 
             // Create RoomsController
-            controller = new RoomsController(fakeRoomRepository.Object);
+            roomsService = new RoomsService(mockRoomRepo.Object);
         }
 
         [Fact]
         public void GetAll_ReturnsListWithCorrectNumberOfRooms()
         {
             // Act
-            var result = controller.Get() as List<Room>;
+            var result = roomsService.GetAllRooms() as List<Room>;
             var noOfRooms = result.Count;
 
             // Assert
@@ -67,49 +66,51 @@ namespace HotelBooking.UnitTests
         public void GetById_RoomExists_ReturnsIActionResultWithRoom()
         {
             // Act
-            var result = controller.Get(2) as ObjectResult;
-            var room = result.Value as Room;
-            var roomId = room.Id;
+            var room = roomsService.GetRoom(2);
 
             // Assert
-            Assert.InRange<int>(roomId, 1, 2);
+            Assert.NotNull(room);
+            Assert.Equal(2, room.Id);
         }
 
         [Fact]
         public void Delete_WhenIdIsLargerThanZero_RemoveIsCalled()
         {
             // Act
-            controller.Delete(1);
+            roomsService.RemoveRoom(1);
 
-            // Assert against the mock object
-            fakeRoomRepository.Verify(x => x.Remove(1), Times.Once);
+            // Assert
+            mockRoomRepo.Verify(x => x.Remove(1), Times.Once);
         }
+
 
         [Fact]
         public void Delete_WhenIdIsLessThanOne_RemoveIsNotCalled()
         {
-            // Act
-            controller.Delete(0);
+            // Act && Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => roomsService.RemoveRoom(0));
+            Assert.IsType<InvalidOperationException>(exception);
+
 
             // Assert against the mock object
-            fakeRoomRepository.Verify(x => x.Remove(It.IsAny<int>()), Times.Never());
+            mockRoomRepo.Verify(x => x.Remove(It.IsAny<int>()), Times.Never());
         }
 
         [Fact]
-        public void Delete_WhenIdIsLargerThanTwo_RemoveThrowsException()
+        public void Delete_WhenIdDoesNotExist_RemoveThrowsException()
         {
-            // Instruct the fake Remove method to throw an InvalidOperationException, if a room id that
-            // does not exist in the repository is passed as a parameter. This behavior corresponds to
-            // the behavior of the real repoository's Remove method.
-            fakeRoomRepository.Setup(x =>
-                    x.Remove(It.Is<int>(id => id < 1 || id > 2))).
-                    Throws<InvalidOperationException>();
+            // Arrange
+            mockRoomRepo.Setup(x => x.Get(It.IsAny<int>())).Returns((Room)null);
 
-            // Assert
-            Assert.Throws<InvalidOperationException>(() => controller.Delete(3));
+            // Act & Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => roomsService.RemoveRoom(3));
+    
+            // Verify that the exception is of the correct type
+            Assert.IsType<InvalidOperationException>(exception);
 
-            // Assert against the mock object
-            fakeRoomRepository.Verify(x => x.Remove(It.IsAny<int>()));
+            // Verify that Remove was never called since the room does not exist
+            mockRoomRepo.Verify(x => x.Remove(It.IsAny<int>()), Times.Never());
         }
+
     }
 }
