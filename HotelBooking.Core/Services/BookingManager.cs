@@ -74,5 +74,33 @@ namespace HotelBooking.Core
             return fullyOccupiedDates;
         }
 
+        public void RemoveBooking(int bookingId)
+        {
+            Booking booking = bookingRepository.Get(bookingId);
+            if (booking != null)
+            {
+                bookingRepository.Remove(bookingId);
+            }
+        }
+
+        public void EditBooking(Booking booking)
+        {
+            Booking modifiedBooking = bookingRepository.Get(booking.Id);
+            if (modifiedBooking != null)
+            {
+                modifiedBooking.IsActive = booking.IsActive;
+                modifiedBooking.CustomerId = booking.CustomerId;
+                modifiedBooking.EndDate = booking.EndDate;
+                modifiedBooking.StartDate = booking.StartDate;
+                modifiedBooking.RoomId = booking.RoomId;
+                bookingRepository.Edit(modifiedBooking);
+            }
+        }
+
+        public Booking GetBooking(int id)
+        {
+            return bookingRepository.Get(id);
+        }
+
     }
 }
