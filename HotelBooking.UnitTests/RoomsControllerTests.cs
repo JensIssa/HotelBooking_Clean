@@ -119,7 +119,7 @@ namespace HotelBooking.UnitTests
         public void AddRoom_Succesfully()
         {
             // Arrange
-            var newRoom = new Room { Id = 1, Description = "C" };
+            var newRoom = new Room { Id = 3, Description = "C" };
             mockRoomRepo.Setup(x => x.Add(newRoom)).Verifiable();
             // Act
             roomsService.AddRoom(newRoom);
