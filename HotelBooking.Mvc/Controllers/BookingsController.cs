@@ -4,24 +4,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBooking.Core;
 using HotelBooking.Mvc.Models;
+using HotelBooking.Core.Interfaces;
 
 namespace HotelBooking.Mvc.Controllers
 {
     public class BookingsController : Controller
     {
-        private IRepository<Booking> bookingRepository;
-        private IRepository<Customer> customerRepository;
         private IRepository<Room> roomRepository;
         private IBookingManager bookingManager;
         private IBookingViewModel bookingViewModel;
+        private ICustomerManager _customerManager;
 
-        public BookingsController(IRepository<Booking> bookingRepos, IRepository<Room> roomRepos,
-            IRepository<Customer> customerRepos, IBookingManager manager, IBookingViewModel viewModel)
+        public BookingsController(IRepository<Room> roomRepos,
+             IBookingManager manager, IBookingViewModel viewModel, ICustomerManager customerManager)
         {
-            bookingRepository = bookingRepos;
             roomRepository = roomRepos;
-            customerRepository = customerRepos;
             bookingManager = manager;
+            _customerManager = customerManager;
             bookingViewModel = viewModel;
         }
 
@@ -40,7 +39,7 @@ namespace HotelBooking.Mvc.Controllers
                 return NotFound();
             }
 
-            Booking booking = bookingRepository.Get(id.Value);
+            Booking booking = bookingManager.GetBooking(id.Value);
             if (booking == null)
             {
                 return NotFound();
@@ -52,7 +51,7 @@ namespace HotelBooking.Mvc.Controllers
         // GET: Bookings/Create
         public IActionResult Create()
         {
-            ViewData["CustomerId"] = new SelectList(customerRepository.GetAll(), "Id", "Name");
+            ViewData["CustomerId"] = new SelectList(_customerManager.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -73,7 +72,7 @@ namespace HotelBooking.Mvc.Controllers
                 }
             }
 
-            ViewData["CustomerId"] = new SelectList(customerRepository.GetAll(), "Id", "Name", booking.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_customerManager.GetAll(), "Id", "Name", booking.CustomerId);
             ViewBag.Status = "The booking could not be created. There were no available room.";
             return View(booking);
         }
@@ -86,12 +85,12 @@ namespace HotelBooking.Mvc.Controllers
                 return NotFound();
             }
 
-            Booking booking = bookingRepository.Get(id.Value);
+            Booking booking = bookingManager.GetBooking(id.Value);
             if (booking == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(customerRepository.GetAll(), "Id", "Name", booking.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_customerManager.GetAll(), "Id", "Name", booking.CustomerId);
             ViewData["RoomId"] = new SelectList(roomRepository.GetAll(), "Id", "Description", booking.RoomId);
             return View(booking);
         }
@@ -112,11 +111,11 @@ namespace HotelBooking.Mvc.Controllers
             {
                 try
                 {
-                    bookingRepository.Edit(booking);
+                    bookingManager.EditBooking(booking);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (bookingRepository.Get(booking.Id) == null)
+                    if (bookingManager.GetBooking(booking.Id) == null)
                     {
                         return NotFound();
                     }
@@ -127,7 +126,7 @@ namespace HotelBooking.Mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(customerRepository.GetAll(), "Id", "Name", booking.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_customerManager.GetAll(), "Id", "Name", booking.CustomerId);
             ViewData["RoomId"] = new SelectList(roomRepository.GetAll(), "Id", "Description", booking.RoomId);
             return View(booking);
         }
@@ -140,7 +139,7 @@ namespace HotelBooking.Mvc.Controllers
                 return NotFound();
             }
 
-            Booking booking = bookingRepository.Get(id.Value);
+            Booking booking = bookingManager.GetBooking(id.Value);
             if (booking == null)
             {
                 return NotFound();
@@ -154,7 +153,7 @@ namespace HotelBooking.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            bookingRepository.Remove(id);
+            bookingManager.RemoveBooking(id);
             return RedirectToAction(nameof(Index));
         }
 
