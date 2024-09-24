@@ -22,7 +22,8 @@ namespace HotelBooking.Infrastructure.Repositories
 
         public void Edit(Room entity)
         {
-            throw new NotImplementedException();
+            db.Room.Update(entity);
+            db.SaveChanges();
         }
 
         public Room Get(int id)
