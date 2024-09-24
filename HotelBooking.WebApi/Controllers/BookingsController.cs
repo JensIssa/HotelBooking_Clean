@@ -10,16 +10,11 @@ namespace HotelBooking.WebApi.Controllers
     public class BookingsController : Controller
     {
         private IRepository<Booking> bookingRepository;
-        private IRepository<Customer> customerRepository;
-        private IRepository<Room> roomRepository;
         private IBookingManager bookingManager;
 
-        public BookingsController(IRepository<Booking> bookingRepos, IRepository<Room> roomRepos,
-            IRepository<Customer> customerRepos, IBookingManager manager)
+        public BookingsController(IRepository<Booking> bookingRepos, IBookingManager manager)
         {
             bookingRepository = bookingRepos;
-            roomRepository = roomRepos;
-            customerRepository = customerRepos;
             bookingManager = manager;
         }
 
@@ -34,7 +29,7 @@ namespace HotelBooking.WebApi.Controllers
         [HttpGet("{id}", Name = "GetBooking")]
         public IActionResult Get(int id)
         {
-            var item = bookingRepository.Get(id);
+            var item = bookingManager.GetBooking(id);
             if (item == null)
             {
                 return NotFound();
@@ -73,7 +68,7 @@ namespace HotelBooking.WebApi.Controllers
                 return BadRequest();
             }
 
-            var modifiedBooking = bookingRepository.Get(id);
+            var modifiedBooking = bookingManager.GetBooking(id);
 
             if (modifiedBooking == null)
             {
@@ -86,7 +81,7 @@ namespace HotelBooking.WebApi.Controllers
             modifiedBooking.IsActive = booking.IsActive;
             modifiedBooking.CustomerId = booking.CustomerId;
 
-            bookingRepository.Edit(modifiedBooking);
+            bookingManager.EditBooking(modifiedBooking);
             return NoContent();
         }
 
@@ -99,7 +94,7 @@ namespace HotelBooking.WebApi.Controllers
                 return NotFound();
             }
 
-            bookingRepository.Remove(id);
+            bookingManager.RemoveBooking(id);
             return NoContent();
         }
 
