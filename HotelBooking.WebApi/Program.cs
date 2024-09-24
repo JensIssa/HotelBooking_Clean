@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using HotelBooking.Core;
+using HotelBooking.Core.Interfaces;
+using HotelBooking.Core.Services;
 using HotelBooking.Infrastructure;
 using HotelBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,8 @@ builder.Services.AddScoped<IRepository<Customer>, CustomerRepository>();
 builder.Services.AddScoped<IRepository<Booking>, BookingRepository>();
 builder.Services.AddScoped<IBookingManager, BookingManager>();
 builder.Services.AddTransient<IDbInitializer, DbInitializer>();
+builder.Services.AddScoped<ICustomerManager, CustomerManager>();
+builder.Services.AddScoped<IRoomService, RoomsService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
