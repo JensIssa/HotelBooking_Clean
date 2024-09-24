@@ -25,6 +25,12 @@ namespace HotelBooking.UnitTests
 
 
 
+        /// <summary>
+        /// Testing the FindAvailableRoom method in the BookingManager class, where we look at the case where the start date is not in the future.
+        /// Should return an ArgumentException.
+        /// Optimized it to use the InlineData attribute to pass the test data to the test method, and used Moq for the repository.
+        /// </summary>
+        /// <param name="daysFromToday">Days from today</param>
         [Theory]
         [InlineData(-1)] // Past date
         [InlineData(0)]  // Today
@@ -41,6 +47,11 @@ namespace HotelBooking.UnitTests
             Assert.Throws<ArgumentException>(act);
         }
 
+        /// <summary>
+        /// Testing the FindAvailableRoom method in the BookingManager class, where we make sure that the method returns -1 if no room is available.
+        /// Optimized it to use the InlineData attribute to pass the test data to the test method, and used Moq for the repository.
+        /// </summary>
+        /// <param name="daysFromToday"></param>
         [Theory]
         [InlineData(1)] // Tomorrow
         [InlineData(2)] // Day after tomorrow
@@ -63,6 +74,11 @@ namespace HotelBooking.UnitTests
             Assert.NotEqual(-1, roomId);
         }
 
+        /// <summary>
+        /// Find available room method in the BookingManager class, where we make sure that the method returns a room that is available.
+        /// Returns a room that is available.
+        /// </summary>
+        /// <param name="daysFromToday"></param>
         [Theory]
         [InlineData(1)] // Tomorrow
         public void FindAvailableRoom_RoomAvailable_ReturnsAvailableRoom(int daysFromToday)
@@ -111,6 +127,15 @@ namespace HotelBooking.UnitTests
             Assert.Empty(overlappingBookings);
         }
     
+        /// <summary>
+        /// Testing the CreateBooking method in the BookingManager class, where we look at different cases of booking creation.
+        /// Our test data is passed to the test method using the ClassData attribute, and we use Moq for the repository.
+        /// Our test cases can be seen in the "CreateBookingTestData".
+        /// </summary>
+        /// <param name="bookingStartDate">Start date of booking</param>
+        /// <param name="bookingEndDate">End date of booking</param>
+        /// <param name="existingBookings">Existing bookings</param>
+        /// <param name="expectedResult">The expected return value of the method</param>
 
         [Theory]
         [ClassData(typeof(CreateBookingTestData))]
@@ -146,6 +171,17 @@ namespace HotelBooking.UnitTests
             }
         }
 
+        /// <summary>
+        /// Testing the GetFullyOccupiedDates method in the BookingManager class, where we look at different cases of fully occupied dates.
+        /// Our test data is passed to the test method using the ClassData attribute, and we use Moq for the repository.
+        /// Our test cases can be seen in the "GetFullyOccupiedDatesTestData".
+        /// </summary>
+        /// <param name="startDate">Start date</param>
+        /// <param name="endDate">End date</param>
+        /// <param name="existingBookings">The existing bookings</param>
+        /// <param name="rooms">List of rooms</param>
+        /// <param name="expectedDates">List of expected fully occupied dates</param>
+
         [Theory]
         [ClassData(typeof(GetFullyOccupiedDatesTestData))]
         public void GetFullyOccupiedDates_ReturnsExpectedResult(DateTime startDate, DateTime endDate, List<Booking> existingBookings, List<Room> rooms, List<DateTime> expectedDates)
@@ -161,6 +197,9 @@ namespace HotelBooking.UnitTests
             Assert.Equal(expectedDates.OrderBy(d => d), result.OrderBy(d => d));
         }
 
+        /// <summary>
+        /// Checks whether a booking exists in the repository, before removing it.
+        /// </summary>
         [Fact]
         public void RemoveBooking_BookingExists_RemovesBooking()
         {
@@ -178,6 +217,9 @@ namespace HotelBooking.UnitTests
         }
 
 
+        /// <summary>
+        /// Checks whether a booking exists in the repository, before modifying it.
+        /// </summary>
         [Fact]
         public void EditBooking_BookingExists_EditsBooking()
         {
