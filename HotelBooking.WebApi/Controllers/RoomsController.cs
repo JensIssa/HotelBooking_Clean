@@ -10,25 +10,25 @@ namespace HotelBooking.WebApi.Controllers
     [Route("[controller]")]
     public class RoomsController : Controller
     {
-        private readonly IRepository<Room> repository;
+        private readonly IRoomService _roomService;
 
-        public RoomsController(IRepository<Room> repos)
+        public RoomsController(IRoomService roomService)
         {
-            repository = repos;
+            _roomService = roomService;
         }
 
         // GET: rooms
         [HttpGet(Name = "GetRooms")]
         public IEnumerable<Room> Get()
         {
-            return repository.GetAll();
+            return _roomService.GetAllRooms();
         }
 
         // GET rooms/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var item = repository.Get(id);
+            var item = _roomService.GetRoom(id);
             if (item == null)
             {
                 return NotFound();
@@ -45,7 +45,7 @@ namespace HotelBooking.WebApi.Controllers
                 return BadRequest();
             }
 
-            repository.Add(room);
+            _roomService.AddRoom(room);
             return CreatedAtRoute("GetRooms", null);
         }
 
@@ -56,7 +56,7 @@ namespace HotelBooking.WebApi.Controllers
         {
             if (id > 0)
             {
-                repository.Remove(id);
+                _roomService.RemoveRoom(id);
                 return NoContent();
             }
             else {

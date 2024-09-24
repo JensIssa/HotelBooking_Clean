@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using HotelBooking.Core;
+using HotelBooking.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -9,18 +10,18 @@ namespace HotelBooking.WebApi.Controllers
     [Route("[controller]")]
     public class CustomersController : Controller
     {
-        private readonly IRepository<Customer> repository;
+        private readonly ICustomerManager _customerManager;
 
-        public CustomersController(IRepository<Customer> repos)
+        public CustomersController(ICustomerManager customerManager)
         {
-            repository = repos;
+            _customerManager = customerManager;
         }
 
         // GET: customers
         [HttpGet]
         public IEnumerable<Customer> Get()
         {
-            return repository.GetAll();
+            return _customerManager.GetAll();
         }
 
     }
