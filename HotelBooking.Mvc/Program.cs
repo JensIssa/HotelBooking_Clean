@@ -1,4 +1,6 @@
 ﻿using HotelBooking.Core;
+using HotelBooking.Core.Interfaces;
+using HotelBooking.Core.Services;
 using HotelBooking.Infrastructure;
 using HotelBooking.Infrastructure.Repositories;
 using HotelBooking.Mvc.Models;
@@ -15,6 +17,8 @@ builder.Services.AddScoped<IRepository<Booking>, BookingRepository>();
 builder.Services.AddScoped<IBookingManager, BookingManager>();
 builder.Services.AddScoped<IBookingViewModel, BookingViewModel>();
 builder.Services.AddTransient<IDbInitializer, DbInitializer>();
+builder.Services.AddScoped<ICustomerManager, CustomerManager>();
+builder.Services.AddScoped<IRoomService, RoomsService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
