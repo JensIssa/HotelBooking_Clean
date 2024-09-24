@@ -7,17 +7,17 @@ namespace HotelBooking.Mvc.Controllers
 {
     public class RoomsController : Controller
     {
-        private IRepository<Room> repository;
+        private readonly IRoomService RoomService;
 
-        public RoomsController(IRepository<Room> repos)
+        public RoomsController(IRoomService roomService)
         {
-            repository = repos;
+            this.RoomService = roomService;
         }
 
         // GET: Rooms
         public IActionResult Index()
         {
-            return View(repository.GetAll().ToList());
+            return View(RoomService.GetAllRooms().ToList());
         }
 
         // GET: Rooms/Details/5
@@ -28,7 +28,7 @@ namespace HotelBooking.Mvc.Controllers
                 return NotFound();
             }
 
-            Room room = repository.Get(id.Value);
+            Room room = RoomService.GetRoom(id.Value);
             if (room == null)
             {
                 return NotFound();
@@ -52,7 +52,7 @@ namespace HotelBooking.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                repository.Add(room);
+                RoomService.AddRoom(room);
                 return RedirectToAction(nameof(Index));
             }
             return View(room);
@@ -66,7 +66,7 @@ namespace HotelBooking.Mvc.Controllers
                 return NotFound();
             }
 
-            Room room = repository.Get(id.Value);
+            Room room = RoomService.GetRoom(id.Value);
             if (room == null)
             {
                 return NotFound();
@@ -90,11 +90,11 @@ namespace HotelBooking.Mvc.Controllers
             {
                 try
                 {
-                    repository.Edit(room);
+                    RoomService.EditRoom(room);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (repository.Get(room.Id) == null)
+                    if (RoomService.GetRoom(room.Id) == null)
                     {
                         return NotFound();
                     }
@@ -116,7 +116,7 @@ namespace HotelBooking.Mvc.Controllers
                 return NotFound();
             }
 
-            Room room = repository.Get(id.Value);
+            Room room = RoomService.GetRoom(id.Value);
             if (room == null)
             {
                 return NotFound();
@@ -131,7 +131,7 @@ namespace HotelBooking.Mvc.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             if (id > 0)
-                repository.Remove(id);
+                RoomService.RemoveRoom(id);
             return RedirectToAction(nameof(Index));
         }
 
