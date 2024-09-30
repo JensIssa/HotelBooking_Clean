@@ -25,7 +25,7 @@ namespace HotelBooking.WebApi.Controllers
         }
 
         // GET rooms/5
-        [HttpGet("{id}", Name = "GetRoomById")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             var item = _roomService.GetRoom(id);
@@ -33,7 +33,7 @@ namespace HotelBooking.WebApi.Controllers
             {
                 return NotFound();
             }
-            return Ok(item);
+            return new ObjectResult(item);
         }
 
 
@@ -47,8 +47,7 @@ namespace HotelBooking.WebApi.Controllers
             }
 
             _roomService.AddRoom(room);
-
-            return CreatedAtAction(nameof(Get), new { id = room.Id }, room);
+            return CreatedAtRoute("GetRooms", null);
         }
 
 
@@ -62,7 +61,8 @@ namespace HotelBooking.WebApi.Controllers
                 _roomService.RemoveRoom(id);
                 return NoContent();
             }
-            else {
+            else
+            {
                 return BadRequest();
             }
         }
