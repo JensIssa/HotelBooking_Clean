@@ -11,7 +11,7 @@ namespace HotelBooking.Mvc.Controllers
 
         public RoomsController(IRoomService roomService)
         {
-            this.RoomService = roomService;
+            RoomService = roomService;
         }
 
         // GET: Rooms
@@ -25,17 +25,25 @@ namespace HotelBooking.Mvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest("Room ID is required.");
             }
 
-            Room room = RoomService.GetRoom(id.Value);
-            if (room == null)
+            try
             {
-                return NotFound();
-            }
+                Room room = RoomService.GetRoom(id.Value);
+                if (room == null)
+                {
+                    return NotFound($"Room with ID {id} not found.");
+                }
 
-            return View(room);
+                return Ok(room); // Return room as JSON
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
+
 
         // GET: Rooms/Create
         public IActionResult Create()
@@ -52,11 +60,19 @@ namespace HotelBooking.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                RoomService.AddRoom(room);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    RoomService.AddRoom(room);
+                    return StatusCode(201);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex.Message); 
+                }
             }
-            return View(room);
+            return BadRequest(ModelState);
         }
+
 
         // GET: Rooms/Edit/5
         public IActionResult Edit(int? id)
