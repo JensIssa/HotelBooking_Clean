@@ -139,7 +139,7 @@ namespace HotelBooking.UnitTests
 
         [Theory]
         [ClassData(typeof(CreateBookingTestData))]
-        public void CreateBooking_ReturnsExpectedResult(DateTime bookingStartDate, DateTime bookingEndDate, List<Booking> existingBookings, bool expectedResult)
+        public void CreateBooking_ReturnsBool(DateTime bookingStartDate, DateTime bookingEndDate, List<Booking> existingBookings, bool expectedResult)
         {
             // Arrange
             Booking booking = new Booking
