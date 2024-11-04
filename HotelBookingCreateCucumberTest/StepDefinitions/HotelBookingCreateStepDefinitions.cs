@@ -22,6 +22,8 @@ namespace HotelBookingCreateCucumberTest.StepDefinitions
         private readonly Mock<IRepository<Booking>> _mockBookingRepository;
         private readonly Mock<IRepository<Room>> _mockRoomRepository;
         private readonly BookingManager _bookingManager;
+        private ArgumentException _expectedException;
+
 
         public HotelBookingCreateStepDefinitions()
         {
@@ -72,6 +74,7 @@ namespace HotelBookingCreateCucumberTest.StepDefinitions
 
             _bookingResult = _bookingManager.CreateBooking(booking);
         }
+
 
 
         [Then(@"the booking should be unsuccessful")]

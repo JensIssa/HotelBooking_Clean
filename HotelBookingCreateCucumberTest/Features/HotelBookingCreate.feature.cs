@@ -143,7 +143,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 await this.ScenarioStartAsync();
 #line 14
-    await testRunner.GivenAsync("there is a hotel room available2", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+    await testRunner.GivenAsync("there is a hotel room available", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 15
     await testRunner.AndAsync("the room is booked from \"2024-11-25\" to \"2024-11-30\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -153,6 +153,147 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 17
     await testRunner.ThenAsync("the booking should be unsuccessful", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Create a booking with overlapping dates")]
+        [Xunit.TraitAttribute("FeatureTitle", "HotelBookingCreate")]
+        [Xunit.TraitAttribute("Description", "Create a booking with overlapping dates")]
+        [Xunit.TraitAttribute("Category", "tag3")]
+        public async System.Threading.Tasks.Task CreateABookingWithOverlappingDates()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "tag3"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Create a booking with overlapping dates", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 20
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 21
+    await testRunner.GivenAsync("there is a hotel room available", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 22
+    await testRunner.AndAsync("the room is booked from \"2024-11-26\" to \"2024-11-28\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 23
+    await testRunner.WhenAsync("I book the room from \"2024-11-25\" to \"2024-11-27\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 24
+    await testRunner.ThenAsync("the booking should be unsuccessful", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Book a room with invalid date range, where start date is after end date")]
+        [Xunit.TraitAttribute("FeatureTitle", "HotelBookingCreate")]
+        [Xunit.TraitAttribute("Description", "Book a room with invalid date range, where start date is after end date")]
+        [Xunit.TraitAttribute("Category", "tag4")]
+        public async System.Threading.Tasks.Task BookARoomWithInvalidDateRangeWhereStartDateIsAfterEndDate()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "tag4"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Book a room with invalid date range, where start date is after end date", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 28
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 29
+    await testRunner.GivenAsync("there is a hotel room available", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 30
+    await testRunner.AndAsync("the room is booked from \"2024-11-26\" to \"2024-11-28\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 31
+    await testRunner.WhenAsync("I book the room from \"2024-11-10\" to \"2024-11-07\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 32
+    await testRunner.ThenAsync("the booking should be unsuccessful", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Book a room with exact date conflict")]
+        [Xunit.TraitAttribute("FeatureTitle", "HotelBookingCreate")]
+        [Xunit.TraitAttribute("Description", "Book a room with exact date conflict")]
+        [Xunit.TraitAttribute("Category", "tag5")]
+        public async System.Threading.Tasks.Task BookARoomWithExactDateConflict()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "tag5"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Book a room with exact date conflict", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 36
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 37
+    await testRunner.GivenAsync("there is a hotel room available", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 38
+    await testRunner.AndAsync("the room is booked from \"2024-11-25\" to \"2024-11-30\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 39
+    await testRunner.WhenAsync("I book the room from \"2024-11-25\" to \"2024-11-30\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 40
+    await testRunner.ThenAsync("the booking should be unsuccessful", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Book a room with check-in date in the past")]
+        [Xunit.TraitAttribute("FeatureTitle", "HotelBookingCreate")]
+        [Xunit.TraitAttribute("Description", "Book a room with check-in date in the past")]
+        [Xunit.TraitAttribute("Category", "tag6")]
+        public async System.Threading.Tasks.Task BookARoomWithCheck_InDateInThePast()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "tag6"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Book a room with check-in date in the past", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 44
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 45
+ await testRunner.GivenAsync("there is a hotel room available", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 46
+    await testRunner.WhenAsync("I book the room from \"2024-10-25\" to \"2024-10-30\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 47
+ await testRunner.ThenAsync("the booking should be unsuccessful", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
